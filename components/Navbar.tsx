@@ -35,7 +35,7 @@ function Navbar() {
         <nav className="w-full fixed z-40">
             <div className={`px-4 md:px-14 py-4 lg:py-1 flex flex-row items-center transition duration-500 ${showBackground ? 'bg-neutral-900 bg-opacity-90' : ''}`}
             >
-                <img className="h-12 mt-5 " src="/images/logo.png" alt="Logo" />
+                <img className="h-12 mt-3 " src="/images/logo.png" alt="Logo" />
                 <div className="ml-8 flex-row gap-6 hidden lg:flex">
                     <NavItem name="Home" />
                     <NavItem name="Series" />

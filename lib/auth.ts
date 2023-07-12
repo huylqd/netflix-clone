@@ -11,7 +11,7 @@ import GoogleProvider from 'next-auth/providers/google'
 
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
-export const  authOptions: NextAuthOptions = {
+export const  authOptions: NextAuthOptions =( {
     providers: [
         GithubProvider({
             clientId: process.env.GITHUB_ID || '',
@@ -76,4 +76,4 @@ export const  authOptions: NextAuthOptions = {
         secret: process.env.NEXTAUTH_JWT_SECRET,
     },
     secret: process.env.NEXTAUTH_SECRET, 
-}
+})
