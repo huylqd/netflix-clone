@@ -10,8 +10,8 @@ export default function profiles() {
             redirect('/auth')
         }
     })
-    // const {data: user } = useCurrentUser()
-    // console.log('user',user);
+    const {data: user } = useCurrentUser()
+    console.log('user',user);
     // debugger
     const router = useRouter();
 
@@ -20,7 +20,14 @@ export default function profiles() {
             <div className="flex flex-col">
                 <h1 className="text-3xl md:text-6xl text-white text-center">Who is watching?</h1>
                 <div className="flex items-center justify-center gap-8 mt-10">
-                    <div onClick={() => router.push('/home')}>
+                    <div onClick={() => {
+                        if(user?.role === 'ADMIN') {
+                            router.push('/admin')
+                        }
+                        else {
+                            router.push('/home')
+                        }
+                    }}>
                         <div className="group flex-row w-44 mx-auto">
                             <div
                                 className="
