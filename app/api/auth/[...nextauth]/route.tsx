@@ -58,6 +58,7 @@ const handler =  NextAuth ({
                 if(!isCorrectPassword) {
                     throw new Error('Incorrect password')
                 }
+                
                 return user;
             }
         })
