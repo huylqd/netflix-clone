@@ -4,7 +4,7 @@ import DataTable from "./DataTable";
 
 const Table = () => {
     const { data } = useMovies()
- 
+
 
     return (
         <div className="w-5/5 absolute left-56 top-10 h-16 ...">

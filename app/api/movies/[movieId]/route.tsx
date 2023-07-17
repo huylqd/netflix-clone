@@ -29,3 +29,22 @@ export async function GET(req: Request, { params }: { params: { movieId: string 
         }
     }
 }
+
+export async function DELETE(req: Request) {
+    const session = await getServerSession(authOptions);
+    if (session) { 
+       
+        try {
+            const id = await req.json()
+            const movie = await prismadb.movie.delete({
+                where: {
+                    id: id
+                }
+            })
+            return NextResponse.json({message: 'Delete success'})
+        } catch (error) {
+            console.log(error);
+            return new Response('Error')
+        }
+    }
+}

@@ -3,12 +3,22 @@ import { AiFillEdit } from 'react-icons/ai'
 import { AiFillDelete } from 'react-icons/ai'
 import { IoMdAddCircle } from 'react-icons/io'
 import { useRouter } from 'next/navigation'
+import axios from 'axios'
 interface DataProps {
     key: any
     data: Record<string, any>
 }
 const DataTable: React.FC<DataProps> = ({data, key}) => {
     const router = useRouter()
+    const deleteMovie = async (id: string) => {
+      try {
+          await axios.delete(`/api/movies/${id}`)
+      } catch (error) {
+          console.log(error);
+          return new Response('Error')
+      }
+  }
+
     return (
         <tr>
             <td className="whitespace-normal px-4 py-2 text-gray-700"></td>
@@ -28,7 +38,7 @@ const DataTable: React.FC<DataProps> = ({data, key}) => {
             <AiFillEdit size={20} onClick={() => router.push('/admin/addMovies')}/>
           </button>
           <button className="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-red-700">
-            <AiFillDelete size={20}/>
+            <AiFillDelete size={20} onClick={() => deleteMovie(data.id)}/>
           </button>
         </td>
         </tr>
