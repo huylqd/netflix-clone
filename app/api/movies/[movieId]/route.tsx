@@ -30,21 +30,32 @@ export async function GET(req: Request, { params }: { params: { movieId: string 
     }
 }
 
-export async function DELETE(req: Request) {
+export async function DELETE(req: Request, { params }: { params: { movieId: string } }) {
+    // const id = await req.json()
+    // console.log(id);    
+    // return
+    
     const session = await getServerSession(authOptions);
-    if (session) { 
-       
+    if (session) {
+        const id = params.movieId;
+        console.log(id);
+        
+        if (typeof id !== 'string') {
+            throw new Error("Invalid ID");
+        }
+        if (!id) {
+            throw new Error("Invalid ID")
+        }
         try {
-            const id = await req.json()
-            const movie = await prismadb.movie.delete({
+            const deletemovie = await prismadb.movie.delete({
                 where: {
                     id: id
                 }
             })
             return NextResponse.json({message: 'Delete success'})
         } catch (error) {
-            console.log(error);
-            return new Response('Error')
+            debugger
+            return NextResponse.json({message: error})
         }
     }
 }

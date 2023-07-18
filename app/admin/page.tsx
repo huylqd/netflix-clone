@@ -7,9 +7,12 @@ import {BiArrowBack} from 'react-icons/bi'
 import { useRouter } from "next/navigation"
 import Table from "@/components/admin/Table"
 import SideBar from "@/components/admin/Sidebar"
+import useMovies from "@/hooks/useMovies"
+import { useState } from "react"
 
 export default function Admin() {
     const router = useRouter()
+    const [state, setState] = useState([])
     const { data: session } = useSession({
         required: true,
         onUnauthenticated() {
@@ -17,6 +20,9 @@ export default function Admin() {
         },
     })
     const { data: user } = useCurrentUser()
+    const { data: dataMovie } = useMovies()
+    
+    console.log('data movie',dataMovie);
 
     if (user && user?.role !== "ADMIN") {
         console.log("You need to be an admin");
@@ -24,12 +30,12 @@ export default function Admin() {
     }
     return (
         <div className="relative">
-            <p className="text-white flex absolute right-10 gap-5 hover:text-green-500" onClick={() => router.push('/home')}>
+            <p className="text-white flex absolute right-10 gap-5 hover:text-green-500 cursor-pointer" onClick={() => router.push('/home')}>
                 <BiArrowBack size={30} className="" />
                 <span>GO TO HOME</span>
             </p>
             <SideBar/>
-            <Table/>
+            <Table data={state}/>
         </div>
     )
 }

@@ -2,10 +2,12 @@
 import useMovies from "@/hooks/useMovies"
 import DataTable from "./DataTable";
 
-const Table = () => {
-    const { data } = useMovies()
-
-
+interface movieProps {
+    data: Record<string, any>[];
+}
+const Table: React.FC<movieProps> = ({data}) => {
+    console.log(data);
+    
     return (
         <div className="w-5/5 absolute left-56 top-10 h-16 ...">
             <div className="overflow-x-auto">
