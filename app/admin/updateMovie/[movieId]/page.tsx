@@ -1,44 +1,49 @@
+
 'use client'
 import SideBar from "@/components/admin/Sidebar";
-import Input from "@/components/input"
-import { useCallback, useState } from 'react'
+import useMovie from "@/hooks/useMovie";
+import useMovies from "@/hooks/useMovies";
+import { useSession } from "next-auth/react";
+import { redirect, useParams, useRouter } from "next/navigation";
 import { useForm } from 'react-hook-form'
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import useMovie from '@/hooks/useMovies'
 
-export default function AddMovies() {
+
+export default function UpdateMovie () {
+    const { data: session } = useSession({
+        required: true,
+        onUnauthenticated() {
+            redirect('/api/auth/signin')
+        }
+    })
+    const { movieId } = useParams();
+    const { data } = useMovie(movieId as string);
     const { register, watch, handleSubmit, formState: { isValid, errors } } = useForm({
         mode: 'all',
-
     })
-    const { addMovie } = useMovie()
     const passDigital = new RegExp(/^\S/)
     const router = useRouter()
-    const [show, setShow] = useState(false)
-    const [title, setTitle] = useState('')
-    const formData = watch();
+    const { updateMovie } = useMovies()
     const formSubmit = (data: any) => {
         try {
-            addMovie(data)
-            alert('Create Success')
+            updateMovie(movieId, data)
+            alert('Update Success')
             router.push('/admin')
         } catch (error) {
             console.log(error);
         }
     }
-
-    return (
+     return (
         <div className="relative w-full">
             <SideBar />
             <div className="flex justify-center absolute top-5 w-full" style={{ left: 70 }}  >
                 <div className="bg-black bg-opacity-70 px-16 py-6 self-center mt-2 rounded-md w-3/5 ">
                     <h2 className="text-rose-700 text-4xl mb-8 font-semibold">
-                        Add Movies
+                        Update Movies
                     </h2>
                     <form onSubmit={handleSubmit(formSubmit)}>
                         <div className="flex flex-col gap-4">
                             <input
+                                defaultValue={data?.title}
                                 type="text"
                                 {...register('title', {
                                     required: true, pattern: passDigital, minLength: 5,
@@ -66,6 +71,7 @@ export default function AddMovies() {
                             {errors.title?.type === 'minLength' && <p className="error text-rose-700">Minlength is 5 characters.</p>}
                             <input
                                 type="text"
+                                defaultValue={data?.description}
                                 {...register('description', { required: true, pattern: passDigital, minLength: 5, })}
                                 id="description"
                                 className="
@@ -90,6 +96,7 @@ export default function AddMovies() {
                             {errors.description?.type === 'minLength' && <p className="error text-rose-700">Minlength is 5 characters.</p>}
                             <input
                                 type="text"
+                                defaultValue={data?.videoUrl}
                                 {...register('videoUrl', { required: true, pattern: passDigital, minLength: 5, })}
                                 id="videoUrl"
                                 className="
@@ -114,6 +121,7 @@ export default function AddMovies() {
                             {errors.videoUrl?.type === 'minLength' && <p className="error text-rose-700">Minlength is 5 characters.</p>}
                             <input
                                 type="text"
+                                defaultValue={data?.thumbnailUrl}
                                 {...register('thumbnailUrl', { required: true, pattern: passDigital, minLength: 5, })}
                                 id="thumbnailUrl"
                                 className="
@@ -138,6 +146,7 @@ export default function AddMovies() {
                             {errors.thumbnailUrl?.type === 'minLength' && <p className="error text-rose-700">Minlength is 5 characters.</p>}
                             <input
                                 type="text"
+                                defaultValue={data?.genre}
                                 {...register('genre', { required: true, pattern: passDigital, minLength: 5, })}
                                 id="genre"
                                 className="
@@ -158,10 +167,11 @@ export default function AddMovies() {
                             />
 
                             {errors.genre?.type === 'required' && <p className="error text-rose-700">Genre is required.</p>}
-                            
+                            {errors.genre?.type === 'pattern' && <p className="error text-rose-700">Genre no space.</p>}
                             {errors.genre?.type === 'minLength' && <p className="error text-rose-700">Minlength is 5 characters.</p>}
                             <input
                                 type="text"
+                                defaultValue={data?.duration}
                                 {...register('duration', { required: true, pattern: passDigital })}
                                 id="duration"
                                 className="
@@ -184,7 +194,7 @@ export default function AddMovies() {
                             {errors.duration?.type === 'required' && <p className="error text-rose-700">Duration is required.</p>}
                             {errors.duration?.type === 'pattern' && <p className="error text-rose-700">Duration no space.</p>}
                             <button className="bg-red-600 py-3 text-white rounded-md w-1/5 mt-10 hover:bg-red-700 transition" type="submit">
-                                Add
+                                Update
                             </button>
                         </div>
 
@@ -196,4 +206,4 @@ export default function AddMovies() {
 
 
     )
-}
+} 

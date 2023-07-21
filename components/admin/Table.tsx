@@ -1,12 +1,12 @@
 
 import useMovies from "@/hooks/useMovies"
 import DataTable from "./DataTable";
+import { useEffect, useState } from "react";
 
 interface movieProps {
     data: Record<string, any>[];
 }
 const Table: React.FC<movieProps> = ({data}) => {
-    console.log(data);
     
     return (
         <div className="w-5/5 absolute left-56 top-10 h-16 ...">
