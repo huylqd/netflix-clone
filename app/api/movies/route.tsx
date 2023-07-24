@@ -10,7 +10,6 @@ export async function GET(req: Request) {
         try {
             const movies = await prismadb.movie.findMany();
             console.log(movies);
-            
             return NextResponse.json(movies);
         } catch (error) {
             return NextResponse.json(error)

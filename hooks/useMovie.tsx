@@ -1,5 +1,6 @@
 import fetcher from '@/lib/fetcher';
-import useSWR from 'swr'
+import axios from 'axios';
+import useSWR, { mutate } from 'swr'
 
 const useMovie = (id?: string) => {
     const { data, error, isLoading } = useSWR(id ? `/api/movies/${id}` : null, fetcher, {
@@ -7,10 +8,11 @@ const useMovie = (id?: string) => {
         revalidateOnFocus: false,
         revalidateOnReconnect: false
     })
+
     return {
         data,
         error,
-        isLoading
+        isLoading,
     }
 }
 export default useMovie;

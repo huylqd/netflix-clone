@@ -8,11 +8,11 @@ import { useRouter } from "next/navigation"
 import Table from "@/components/admin/Table"
 import SideBar from "@/components/admin/Sidebar"
 import useMovies from "@/hooks/useMovies"
-import { useState } from "react"
+
 
 export default function Admin() {
     const router = useRouter()
-    const [state, setState] = useState([])
+
     const { data: session } = useSession({
         required: true,
         onUnauthenticated() {
@@ -20,10 +20,9 @@ export default function Admin() {
         },
     })
     const { data: user } = useCurrentUser()
-    const { data: dataMovie } = useMovies()
     
-    console.log('data movie',dataMovie);
-
+    const { data: dataMovie } = useMovies()
+ 
     if (user && user?.role !== "ADMIN") {
         console.log("You need to be an admin");
         redirect('/home')
@@ -35,7 +34,7 @@ export default function Admin() {
                 <span>GO TO HOME</span>
             </p>
             <SideBar/>
-            <Table data={state}/>
+            <Table data={dataMovie}/>
         </div>
     )
 }
