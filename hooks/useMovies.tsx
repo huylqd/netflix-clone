@@ -20,14 +20,18 @@ const useMovies = () => {
         await axios.put( `/api/movies/${id}`, {data})
         mutate('/api/movies/');
     }
-    
+    const uploadVideo = async (data: any) => {
+        await axios.post('/api/uploadVideo', { data })
+        mutate('/api/movies/');
+    }
     return {
         data,
         error,
         isLoading,
         addMovie,
         deleteMovie,
-        updateMovie
+        updateMovie,
+        uploadVideo
     }
 }
 export default useMovies;

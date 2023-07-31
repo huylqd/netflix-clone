@@ -3,6 +3,9 @@ import FavoriteButton from "./FavoriteButton"
 import { useRouter } from "next/navigation"
 import { BiChevronDown } from 'react-icons/bi'
 import useInfoModal from "@/hooks/useInfoModal"
+import { useState } from "react"
+import useCurrentUser from "@/hooks/useCurrentUser"
+import PayCard from "./PayCard"
 interface MovieCardProps {
     data: Record<string, any>
 }
@@ -10,6 +13,17 @@ interface MovieCardProps {
 const MovieCard: React.FC<MovieCardProps> = ({ data }) => {
     const router = useRouter();
     const { openModal } = useInfoModal();
+    const [isRegistered, setIsRegistered] = useState(false);
+    const {data: user} = useCurrentUser()
+    const handleButtonClick = () => {
+        if (user?.customer) {
+          router.push(`/watch/${data?.id}`);
+        } else {
+            return (
+                <></>
+            )
+        }
+      };
     return (
         <div className="group bg-zinc-900 col-span relative h-[12vw]">
             <img className="cursor-pointer object-cover transition duration shadow-xl rounded-md group-hover:opacity-90 sm:group-hover:opacity-0 delay-100 w-full h-[12vw]" src={data.thumbnailUrl} alt="Movie Thumbnail" />
@@ -18,7 +32,10 @@ const MovieCard: React.FC<MovieCardProps> = ({ data }) => {
                 <div className="z-10 bg-zinc-800 p-2 lg:p-4 absolute w-full transition shadow-md rounded-b-md">
 
                     <div className="flex flex-row items-center gap-3">
-                        <div className="cursor-pointer w-6 h-6 lg:w-10 lg:h-10 bg-white rounded-full flex justify-center items-center transition hover:bg-neutral-300" onClick={() => router.push(`/watch/${data?.id}`)}>
+                        <div className="cursor-pointer w-6 h-6 lg:w-10 lg:h-10 bg-white rounded-full flex justify-center items-center transition hover:bg-neutral-300" 
+                            // onClick={() => router.push(`/watch/${data?.id}`)}
+                            onClick={handleButtonClick}
+                        >
                             <BsFillPlayFill size="30" />
                         </div>
                         <FavoriteButton movieId={data?.id} />
