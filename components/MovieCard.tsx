@@ -6,6 +6,8 @@ import useInfoModal from "@/hooks/useInfoModal"
 import { useState } from "react"
 import useCurrentUser from "@/hooks/useCurrentUser"
 import PayCard from "./PayCard"
+import usePayCard from "@/hooks/usePayCard"
+import { log } from "console"
 interface MovieCardProps {
     data: Record<string, any>
 }
@@ -13,15 +15,16 @@ interface MovieCardProps {
 const MovieCard: React.FC<MovieCardProps> = ({ data }) => {
     const router = useRouter();
     const { openModal } = useInfoModal();
+    const { openPayCard } = usePayCard();
     const [isRegistered, setIsRegistered] = useState(false);
     const {data: user} = useCurrentUser()
+    console.log('user', user);
+    
     const handleButtonClick = () => {
-        if (user?.customer) {
+        if (user?.customer === "TRUE") {
           router.push(`/watch/${data?.id}`);
         } else {
-            return (
-                <></>
-            )
+           openPayCard(user?.customer)
         }
       };
     return (
@@ -35,6 +38,11 @@ const MovieCard: React.FC<MovieCardProps> = ({ data }) => {
                         <div className="cursor-pointer w-6 h-6 lg:w-10 lg:h-10 bg-white rounded-full flex justify-center items-center transition hover:bg-neutral-300" 
                             // onClick={() => router.push(`/watch/${data?.id}`)}
                             onClick={handleButtonClick}
+                            // onClick={() => {
+                            //     console.log(user?.customer);
+                                
+                            //     openPayCard(user?.customer)}
+                            // }
                         >
                             <BsFillPlayFill size="30" />
                         </div>

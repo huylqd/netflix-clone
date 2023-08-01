@@ -1,4 +1,4 @@
-'use client'
+// 'use client'
 import './globals.css'
 import Provider from './Provider'
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -7,7 +7,7 @@ export const metadata = {
   description: 'Best OTT platform in the world',
 }
 
-const queryClient = new QueryClient();
+// const queryClient = new QueryClient();
 export default function RootLayout({
   children,
 }: {
@@ -16,11 +16,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-      <QueryClientProvider client={queryClient}>
+      {/* <QueryClientProvider client={queryClient}> */}
         <Provider>
           {children}
         </Provider>
-        </QueryClientProvider>
+        {/* </QueryClientProvider> */}
       </body>
     </html>
   )

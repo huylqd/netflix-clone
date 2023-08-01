@@ -9,6 +9,8 @@ import useFavorites from "@/hooks/useFavorites"
 import InfoModal from "@/components/InfoModal"
 import useInfoModal from "@/hooks/useInfoModal"
 import useCurrentUser from "@/hooks/useCurrentUser"
+import usePayCard from "@/hooks/usePayCard"
+import PayCard from "@/components/PayCard"
 export default function Home() {
     const { data: session } = useSession({
         required: true,
@@ -21,9 +23,11 @@ export default function Home() {
     const { data: movies = [] } = useMovieList();
     const { data: favorites = [] } = useFavorites();
     const { isOpen, closeModal } = useInfoModal();
+    const { isOpenPayCard, closePayCard } = usePayCard()
     return (
         <>
             <InfoModal visible={isOpen} onClose={closeModal} />
+            <PayCard visible={isOpenPayCard} onClose={closePayCard}/>
             <Navbar />
             <BillBoard />
             <div className="pb-40">

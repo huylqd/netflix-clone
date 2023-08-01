@@ -26,13 +26,17 @@
     "lodash": "^4.17.21",
     "next": "13.4.3",
     "next-auth": "^4.22.1",
+    "next-qrcode": "^2.5.0",
     "postcss": "8.4.24",
+    "qrcode": "^1.5.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.45.1",
     "react-icons": "^4.10.1",
+    "react-otp-input": "^3.0.4",
     "react-query": "^3.39.3",
     "reactstrap": "^9.2.0",
+    "speakeasy": "^2.0.0",
     "swr": "^2.2.0",
     "tabler-icons-react": "^1.56.0",
     "tailwindcss": "3.3.2",
@@ -43,6 +47,8 @@
     "@types/bcrypt": "^5.0.0",
     "@types/dropzone": "^5.7.4",
     "@types/lodash": "^4.14.195",
+    "@types/qrcode": "^1.5.1",
+    "@types/speakeasy": "^2.0.7",
     "prisma": "^4.16.2"
   }
 }

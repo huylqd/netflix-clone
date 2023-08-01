@@ -39,7 +39,6 @@ const AddMovies = () => {
                 (progressEvent.loaded * 100) / progressEvent.total
             );
             console.log(percent);
-            
             setProgress(percent);
         },
     };
