@@ -6,8 +6,6 @@ import { authOptions } from "@/lib/auth";
 export async function PUT(req: Request, {params}: {params: {currentId: string}}) {
     const session = await getServerSession(authOptions);
     if (session) {
-        console.log('parrams', params);
-        
         const id = params.currentId;
         if (typeof id !== 'string') {
             throw new Error("Invalid ID");

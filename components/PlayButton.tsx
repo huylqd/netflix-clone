@@ -1,5 +1,7 @@
 import { BsFillPlayFill } from 'react-icons/bs'
 import { useRouter } from 'next/navigation'
+import usePayCard from '@/hooks/usePayCard';
+import useCurrentUser from '@/hooks/useCurrentUser';
 
 interface PlayButtonProps {
     movieId: string
@@ -7,8 +9,18 @@ interface PlayButtonProps {
 
 const PlayButton: React.FC<PlayButtonProps> = ({ movieId }) => {
     const router = useRouter();
+    const { openPayCard } = usePayCard();
+    const {data: user} = useCurrentUser()
+    
+    const handleButtonClick = () => {
+        if (user?.customer === "TRUE") {
+          router.push(`/watch/${movieId}`);
+        } else {
+           openPayCard(user?.customer)
+        }
+      };
     return (
-        <button onClick={() => router.push(`/watch/${movieId}`)}
+        <button onClick={handleButtonClick}
             className='
             bg-white
             rounded-md

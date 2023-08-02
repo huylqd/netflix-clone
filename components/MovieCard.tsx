@@ -14,12 +14,10 @@ interface MovieCardProps {
 
 const MovieCard: React.FC<MovieCardProps> = ({ data }) => {
     const router = useRouter();
+    const [isRegistered, setIsRegistered] = useState(false);
     const { openModal } = useInfoModal();
     const { openPayCard } = usePayCard();
-    const [isRegistered, setIsRegistered] = useState(false);
     const {data: user} = useCurrentUser()
-    console.log('user', user);
-    
     const handleButtonClick = () => {
         if (user?.customer === "TRUE") {
           router.push(`/watch/${data?.id}`);
@@ -36,13 +34,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ data }) => {
 
                     <div className="flex flex-row items-center gap-3">
                         <div className="cursor-pointer w-6 h-6 lg:w-10 lg:h-10 bg-white rounded-full flex justify-center items-center transition hover:bg-neutral-300" 
-                            // onClick={() => router.push(`/watch/${data?.id}`)}
                             onClick={handleButtonClick}
-                            // onClick={() => {
-                            //     console.log(user?.customer);
-                                
-                            //     openPayCard(user?.customer)}
-                            // }
                         >
                             <BsFillPlayFill size="30" />
                         </div>

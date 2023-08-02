@@ -71,4 +71,5 @@ html {
   font-size: 16px; 
   border:1px solid black;
   text-align: center;
+  border-radius: 8px;
 }

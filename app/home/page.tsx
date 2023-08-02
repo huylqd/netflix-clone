@@ -11,6 +11,7 @@ import useInfoModal from "@/hooks/useInfoModal"
 import useCurrentUser from "@/hooks/useCurrentUser"
 import usePayCard from "@/hooks/usePayCard"
 import PayCard from "@/components/PayCard"
+import { useVideoContext } from "../VideoProvider";
 export default function Home() {
     const { data: session } = useSession({
         required: true,
@@ -18,8 +19,10 @@ export default function Home() {
             redirect('/auth')
         }
     })
+    const { videoState, setVideoState } = useVideoContext();
+    console.log('video state', videoState);
+    
     const { data: user } = useCurrentUser();
-
     const { data: movies = [] } = useMovieList();
     const { data: favorites = [] } = useFavorites();
     const { isOpen, closeModal } = useInfoModal();
@@ -27,7 +30,8 @@ export default function Home() {
     return (
         <>
             <InfoModal visible={isOpen} onClose={closeModal} />
-            <PayCard visible={isOpenPayCard} onClose={closePayCard}/>
+            {user?.customer === "FALSE" && <PayCard visible={isOpenPayCard} onClose={closePayCard}/>}
+            
             <Navbar />
             <BillBoard />
             <div className="pb-40">

@@ -12,8 +12,10 @@ export default function Pay() {
     const [otp, setOtp] = useState('');
     const [error, setError] = useState('')
     const [success, setSuccess] = useState('')
-    const { data: user } = useCurrentUser()
+    const { data: user, updateUser } = useCurrentUser()
     const router = useRouter()
+    console.log(user);
+    
     const data = {
         name: user?.name,
         image:user?.image ,
@@ -34,14 +36,17 @@ export default function Pay() {
         if (verify.data.status === 400) {
             setError(verify.data.message)
         }
-        console.log(verify);
-        
         if (verify.data.status === 200) {
+            setError('')
             setSuccess(verify.data.message)
-            const updateUser = await axios.put(`/api/current/${userId}`, { data })
-            if(updateUser.status === 200) {
-                router.push('/home')
+            try {
+                await updateUser(userId, data)
+                    router.push('/home')
+            } catch (error) {
+                    console.log(error);
             }
+           
+            
 
         }
 
@@ -83,6 +88,7 @@ export default function Pay() {
                             // containerStyle={`${error === '' ? "otp-container" : containerStyle }`}
                             containerStyle="otp-container"
                             inputStyle="otp-input"
+                            shouldAutoFocus={true}
                         />
                     </div>
                     <div className='flex justify-center '>
