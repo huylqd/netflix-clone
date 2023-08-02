@@ -11,7 +11,6 @@ import useInfoModal from "@/hooks/useInfoModal"
 import useCurrentUser from "@/hooks/useCurrentUser"
 import usePayCard from "@/hooks/usePayCard"
 import PayCard from "@/components/PayCard"
-import { useVideoContext } from "../VideoProvider";
 export default function Home() {
     const { data: session } = useSession({
         required: true,
@@ -19,8 +18,6 @@ export default function Home() {
             redirect('/auth')
         }
     })
-    const { videoState, setVideoState } = useVideoContext();
-    console.log('video state', videoState);
     
     const { data: user } = useCurrentUser();
     const { data: movies = [] } = useMovieList();

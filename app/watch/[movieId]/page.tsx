@@ -5,7 +5,6 @@ import { AiOutlineArrowLeft } from "react-icons/ai";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
-import { useVideoContext } from "../../VideoProvider";
 export default function Watch() {
     const { data: session } = useSession({
         required: true,
@@ -16,47 +15,63 @@ export default function Watch() {
     const router = useRouter();
     const { movieId } = useParams();
     const { data } = useMovie(movieId as string);
-    const videoRef: any = useRef(null);
-    const { videoState, setVideoState } = useVideoContext();
-    console.log('videoState',videoState);
+
+    const storedWatchedFilms = localStorage.getItem("watchedFilms");
+    const initialWatchedFilms = storedWatchedFilms ? JSON.parse(storedWatchedFilms) : [];
+    const [watchedFilms, setWatchedFilms] = useState(initialWatchedFilms);
+    const videoRef = useRef<HTMLVideoElement>(null);
+    useEffect(() => {
+        localStorage.setItem("watchedFilms", JSON.stringify(watchedFilms));
+    }, [watchedFilms]);
 
     useEffect(() => {
-        if (
-            videoState.movieId === movieId &&
-            videoRef.current &&
-            videoState.currentTime
-        ) {
-            videoRef.current.currentTime = videoState.currentTime;
-        }
-    }, [movieId]);
-    
-    useEffect(() => {
-        const saveTime = () => {
-            const currentTime = videoRef.current?.currentTime;
-            setVideoState((prevState) => ({
-                ...prevState,
-                movieId,
-                currentTime,
-            }));
-        };
-
         const handleBeforeUnload = () => {
-            saveTime();
-        };
-
-        const handleLoadedMetadata = () => {
-            if (videoState.movieId === movieId && videoState.currentTime) {
-                videoRef.current.currentTime = videoState.currentTime;
+            if (videoRef.current) {
+                const currentTime = videoRef.current.currentTime;
+                const film = { id: movieId, watchedTime: currentTime };
+                const updatedWatchedFilms = watchedFilms.filter((film: any) => film.id !== movieId);
+                updatedWatchedFilms.push(film);
+                setWatchedFilms(updatedWatchedFilms);
             }
         };
         window.addEventListener("beforeunload", handleBeforeUnload);
-        videoRef.current?.addEventListener("loadedmetadata", handleLoadedMetadata);
         return () => {
-            saveTime();
             window.removeEventListener("beforeunload", handleBeforeUnload);
-            videoRef.current?.removeEventListener("loadedmetadata", handleLoadedMetadata);
         };
-    }, [movieId, setVideoState]);
+    }, [movieId, watchedFilms]);
+
+    useEffect(() => {
+        if (videoRef.current && data) {
+              videoRef.current.pause();
+            const film = watchedFilms.find((film: any) => film.id === movieId);
+            if (film) {
+                videoRef.current.currentTime = film.watchedTime;
+            } else {
+                videoRef.current.currentTime = 0;
+            }
+            videoRef.current.src = data.videoUrl;
+              videoRef.current.load();
+              videoRef.current.play();
+            videoRef.current.muted = true;
+        }
+    }, [data, movieId, watchedFilms]);
+
+    const debouncedUpdateWatchedTime = useRef<NodeJS.Timeout | null>(null);
+    const handleVideoTimeUpdate = () => {
+        if (videoRef.current) {
+            const currentTime = videoRef.current.currentTime;
+            if (debouncedUpdateWatchedTime.current) {
+                clearTimeout(debouncedUpdateWatchedTime.current);
+            }
+            debouncedUpdateWatchedTime.current = setTimeout(() => {
+                const film = { id: movieId, watchedTime: currentTime };
+                const updatedWatchedFilms = watchedFilms.filter((film: any) => film.id !== movieId);
+                updatedWatchedFilms.push(film);
+                setWatchedFilms(updatedWatchedFilms);
+            }, 1000);
+        }
+    };
+
     return (
         <div className="h-screen w-screen bg-black">
             <nav className="fixed w-full p-4 z-10 flex flex-row items-center gap-8 bg-black bg-opacity-50">
@@ -74,7 +89,8 @@ export default function Watch() {
                 controls
                 autoPlay
                 src={data?.videoUrl}
-
+                onTimeUpdate={handleVideoTimeUpdate}
+            // onCanPlay={handleVideoCanPlay}
             ></video>
         </div>
     )

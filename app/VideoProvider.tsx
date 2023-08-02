@@ -1,5 +1,5 @@
 'use client'
-import { createContext, useContext, useState, Dispatch, SetStateAction } from "react";
+import { createContext, useContext, useState, Dispatch, SetStateAction, useEffect } from "react";
 type VideoContextType = {
   videoState: {
     movieId: string | null;
@@ -25,10 +25,14 @@ export function useVideoContext() {
 }
 
 export function VideoProvider({ children }: Props) {
-  const [videoState, setVideoState] = useState<VideoContextType["videoState"]>({
-    movieId: null,
-    currentTime: 0,
+  const [videoState, setVideoState] = useState(() => {
+    const storedState = localStorage.getItem("videoState");
+    return storedState ? JSON.parse(storedState) : { movieId: null, currentTime: 0 };
   });
+  useEffect(() => {
+    localStorage.setItem("videoState", JSON.stringify(videoState));
+  }, [videoState]);
+
   return (
     <VideoContext.Provider value={{ videoState, setVideoState }}>
       {children}

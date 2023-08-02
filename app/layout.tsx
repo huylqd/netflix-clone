@@ -1,7 +1,6 @@
 // 'use client'
 import './globals.css'
 import Provider from './Provider'
-import {VideoProvider} from './VideoProvider';
 import { QueryClient, QueryClientProvider } from "react-query";
 export const metadata = {
   title: 'Netflix',
@@ -18,11 +17,11 @@ export default function RootLayout({
     <html lang="en">
       <body>
         {/* <QueryClientProvider client={queryClient}> */}
-        <VideoProvider>
+       
           <Provider>
             {children}
           </Provider>
-        </VideoProvider>
+       
 
         {/* </QueryClientProvider> */}
       </body>
